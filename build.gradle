@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin:'application'
+
+version = 1.0
+sourceCompatibility = 1.7
+
+mainClassName = "io.github.uvpoblotzki.graphdb.App"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://m2.neo4j.org/content/repositories/releases/"
+    }
+}
+
+dependencies {
+    compile 'org.springframework:spring-core:4.0.5.RELEASE'
+    compile 'org.springframework.data:spring-data-neo4j:3.1.0.RELEASE'
+    compile 'org.springframework.data:spring-data-neo4j-rest:3.1.0.RELEASE'
+    compile 'javax.validation:validation-api:1.0.0.GA'
+    compile 'commons-io:commons-io:2.4'
+    testCompile 'junit:junit:4.11'
+}
+
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s+')
+    }
+}
