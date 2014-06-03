@@ -4,7 +4,6 @@ import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
@@ -15,10 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * Ein sehr einfacher Parser für Abhängigkeiten in Java-Class Dateien. Es werden alle
  * Imports ausgelesen und als Abhängigkeiten verwendet.
- *
+ * <p>
  * <p>
  * TODO: Es werden keine inneren Klassen und statischen Importe unterstützt.
  * </p>
@@ -47,11 +44,10 @@ public class ClassNodeParser {
    */
   public void saveClassNodes(final Iterable<File> dirs) {
     final Collection<ClassNode> classNodes = new HashSet<>();
-    for (final File dir: dirs) {
+    for (final File dir : dirs) {
       final JavaClassFilesParser dirWalker = new JavaClassFilesParser(dir);
       classNodes.addAll(dirWalker.parse(dir));
     }
-    System.out.println("saving " + classNodes);
     getClassNodeRepository().save(classNodes);
   }
 
@@ -85,8 +81,7 @@ public class ClassNodeParser {
       final LineIterator lines = FileUtils.lineIterator(file, "UTF-8");
       final ClassNode classNode = new ClassNode();
       final String path = file.getAbsolutePath();
-      System.out.println("Handle file " +file);
-      classNode.setName(path.substring(sourceDir.getAbsolutePath().length(), path.length() - 5));
+      classNode.setName(path.substring(sourceDir.getAbsolutePath().length() + 1, path.length() - 5).replaceAll("/", "."));
       try {
         final Set<ClassNode> imports = new HashSet<>();
         while (lines.hasNext()) {
