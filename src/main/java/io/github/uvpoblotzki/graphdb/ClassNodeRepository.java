@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ClassNodeRepository extends GraphRepository<ClassNode> {
+
+  ClassNode findByName(String name);
+
 }

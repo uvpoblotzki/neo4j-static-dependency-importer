@@ -19,6 +19,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-neo4j-rest:3.0.0.RELEASE'
     compile 'javax.validation:validation-api:1.0.0.GA'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.google.guava:guava:17.0'
     testCompile 'junit:junit:4.11'
 }
 

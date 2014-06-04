@@ -1,5 +1,6 @@
 package io.github.uvpoblotzki.graphdb;
 
+import com.google.common.base.Objects;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -11,11 +12,21 @@ import java.util.Set;
 @NodeEntity
 public class ClassNode {
 
+  @GraphId
   private Long id;
+
+  @Indexed(unique = true)
   private String name;
+
+  @RelatedTo(type = "DEPENDS_ON", direction = Direction.OUTGOING)
   private Set<ClassNode> dependsOn;
 
-  @GraphId
+  public ClassNode() {}
+
+  public ClassNode(final String className) {
+    setName(className);
+  }
+
   public Long getId() {
     return id;
   }
@@ -24,7 +35,6 @@ public class ClassNode {
     this.id = id;
   }
 
-  @Indexed
   public String getName() {
     return name;
   }
@@ -33,12 +43,16 @@ public class ClassNode {
     this.name = name;
   }
 
-  @RelatedTo(type = "DEPENDS_ON", direction = Direction.OUTGOING)
   public Set<ClassNode> getDependsOn() {
     return dependsOn;
   }
 
   public void setDependsOn(final Set<ClassNode> dependsOn) {
     this.dependsOn = dependsOn;
+  }
+
+  @Override
+  public String toString() {
+    return Objects.toStringHelper(this).add("className", name).toString();
   }
 }
